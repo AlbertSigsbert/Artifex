@@ -29,17 +29,8 @@ export default function RootLayout() {
   }, [fontsLoaded,error])
   return (
     <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}>
+      screenOptions={{}}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="profile" />
     </Stack>
   );
 }
