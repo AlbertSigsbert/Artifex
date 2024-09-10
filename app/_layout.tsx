@@ -1,6 +1,8 @@
 import { SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Text, View } from 'react-native';
 
 //Prevents the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -26,12 +28,22 @@ export default function RootLayout() {
       // Hides the splash screen manually
       SplashScreen.hideAsync()
     }
-  }, [fontsLoaded,error])
+  }, [fontsLoaded, error])
+
+  if (!fontsLoaded) {
+    return <View><Text>Loading Fonts...</Text></View>; 
+  }
+  
+
   return (
-    <Stack
-      screenOptions={{}}>
-      <Stack.Screen name="index" />
-    </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}> 
+      <Stack
+        screenOptions={{
+          headerShown: false, 
+        }}>
+        <Stack.Screen name="index" />
+      </Stack>
+    </GestureHandlerRootView>
   );
 }
 
