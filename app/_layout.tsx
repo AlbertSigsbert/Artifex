@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Text, View } from 'react-native';
+import { AppProvider } from '@/context/GlobalProvider';
 
 //Prevents the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -31,18 +32,20 @@ export default function RootLayout() {
   }, [fontsLoaded, error])
 
   if (!fontsLoaded) {
-    return <View><Text>Loading Fonts...</Text></View>; 
+    return <View><Text>Loading Fonts...</Text></View>;
   }
-  
+
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}> 
-      <Stack
-        screenOptions={{
-          headerShown: false, 
-        }}>
-        <Stack.Screen name="index" />
-      </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="index" />
+        </Stack>
+      </AppProvider>
     </GestureHandlerRootView>
   );
 }
