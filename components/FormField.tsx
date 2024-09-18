@@ -13,7 +13,8 @@ interface FormFieldProps {
 }
 
 const FormField = ({title, value, handleChangeText, placeholder, otherStyles, ...props}:FormFieldProps) => {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  
   return (
     <View className={`space-y-2 ${otherStyles}`}>
       <Text className='text-base text-gray-100 font-pmedium'>{title}</Text>
@@ -23,7 +24,7 @@ const FormField = ({title, value, handleChangeText, placeholder, otherStyles, ..
           value={value} 
           placeholder={placeholder}
           placeholderTextColor='#7b7b8b'
-          onChangeText={handleChangeText }
+          onChangeText={handleChangeText}
           secureTextEntry={title === 'Password' && !showPassword}
           />
           {title === 'Password' && (
