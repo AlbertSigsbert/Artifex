@@ -10,7 +10,6 @@ import { useAppContext } from "@/context/GlobalProvider";
 export default function App() {
     const { isLoading, isLoggedIn } = useAppContext();
 
-
     if (!isLoading &&  isLoggedIn) return <Redirect href="/home" />  
 
     return (
@@ -32,11 +31,9 @@ export default function App() {
                     </View>
                     <Text className="mt-7 text-sm text-center text-gray-100 font-pregular">
                         Where creativity meets innovation: embark on a journey of limitless exploration with Aora
-
                     </Text>
 
                     <CustomButton title="Continue with Email" handlePress={() => router.push('/sign-in')} containerStyles="w-full mt-7"/>
-
                 </View>
             </ScrollView>
 
