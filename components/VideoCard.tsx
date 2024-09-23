@@ -2,6 +2,7 @@ import { icons } from "@/constants";
 import { Video } from "@/types";
 import { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import { Video as Vidz, ResizeMode, AVPlaybackStatusSuccess } from "expo-av";
 
 interface VideoCardProps {
   video: Video;
@@ -50,7 +51,22 @@ const VideoCard = ({
       </View>
 
       {play ? (
-        <Text className="text-white">Playing</Text>
+         <Vidz
+         // source={{ uri: video }}
+         source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+         className="w-full h-60 rounded-xl mt-3"
+         resizeMode={ResizeMode.CONTAIN}
+         useNativeControls
+         shouldPlay
+         onPlaybackStatusUpdate={(playbackStatus) => {
+           if (playbackStatus.isLoaded) {
+             const status = playbackStatus as AVPlaybackStatusSuccess;
+             if (status.didJustFinish) {
+               setPlay(false);
+             }
+           }
+         }}
+       />
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}

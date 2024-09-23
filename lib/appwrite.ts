@@ -108,3 +108,20 @@ export const getAllVideos = async () => {
       throw new Error(String(error));
   }
 };
+
+export const getLatestVideos = async () => {
+  try {
+    const videos = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videoCollectionId,
+      [
+        Query.orderDesc('$createdAt'),
+        Query.limit(7)
+      ]
+    );
+
+    return videos.documents as Video[];
+  } catch (error) {
+      throw new Error(String(error));
+  }
+};

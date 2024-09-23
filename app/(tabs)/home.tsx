@@ -15,7 +15,7 @@ import Trending from "@/components/Trending";
 
 //appwrite
 import useAppwrite from "@/lib/useAppwrite";
-import { getAllVideos } from "@/lib/appwrite";
+import { getAllVideos, getLatestVideos } from "@/lib/appwrite";
 
 //constants and types
 import { Video } from "@/types";
@@ -24,9 +24,9 @@ import VideoCard from "@/components/VideoCard";
 
 
 const Home = () => {
-
-  const { data: videos, isLoading, refetch } = useAppwrite<Video[]>(getAllVideos);
-
+  const { data: videos, refetch } = useAppwrite<Video[]>(getAllVideos);
+  const { data: latestVideos } = useAppwrite<Video[]>(getLatestVideos);
+  
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -36,8 +36,6 @@ const Home = () => {
 
     setRefreshing(false);
   };
-
-
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -73,7 +71,7 @@ const Home = () => {
               <Text className="text-gray-100 text-lg font-pregular mb-3">
                 Latest Videos
               </Text>
-              <Trending posts={[{ id: "1" }, { id: "2" }, { id: "3" }] ?? []} />
+              <Trending videos={latestVideos ?? []} />
             </View>
           </View>
         )}
