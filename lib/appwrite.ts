@@ -125,3 +125,21 @@ export const getLatestVideos = async () => {
       throw new Error(String(error));
   }
 };
+
+
+
+export const searchPosts = async (query:string) => {
+  try {
+    const videos = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videoCollectionId,
+      [
+        Query.search('title', query),
+      ]
+    );
+
+    return videos.documents as Video[];
+  } catch (error) {
+    throw new Error(String(error));
+  }
+}

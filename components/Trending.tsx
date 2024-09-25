@@ -33,8 +33,6 @@ const zoomOut = {
 
 const TrendingItem = ({ activeVideo, video }: TrendingItemProps) => {
   const [play, setPlay] = useState(false);
- 
-
 
   // console.log('VIDEO URL',video.video)
 
