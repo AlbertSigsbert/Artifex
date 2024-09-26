@@ -1,12 +1,13 @@
 import { getCurrentUser } from "@/lib/appwrite";
+import { Creator } from "@/types";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 
 interface AppContextType {
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  user: { username: string; email: string; avatar: string; } | null;
-  setUser:React.Dispatch<React.SetStateAction<{ username: string; email: string; avatar: string } | null>>;
+  user: Creator | null;
+  setUser:React.Dispatch<React.SetStateAction<Creator | null>>;
   isLoading: boolean;
 }
 

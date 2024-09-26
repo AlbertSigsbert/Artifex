@@ -21,7 +21,7 @@ const Search = () => {
   const { data: videos, isLoading, refetch } = useAppwrite<Video[]>(() => searchPosts(searchQuery));
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+
       <SafeAreaView className="bg-primary h-full">
 
         <FlatList
@@ -58,7 +58,6 @@ const Search = () => {
           }}
         />
       </SafeAreaView>
-    </SafeAreaView>
   );
 };
 

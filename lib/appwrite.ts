@@ -1,4 +1,4 @@
-import { Video } from "@/types";
+import { Creator, Video } from "@/types";
 import {
   Client,
   Account,
@@ -60,7 +60,7 @@ export const createUser = async (
       }
     );
 
-    return newUser;
+    return newUser as Creator;
   } catch (error) {
     console.log(error);
     throw new Error(String(error));
@@ -90,7 +90,7 @@ export const getCurrentUser = async () => {
 
     if (!currentUser) throw Error;
 
-    return currentUser.documents[0];
+    return currentUser.documents[0] as Creator;
   } catch (error) {
     console.log(error);
   }
@@ -139,6 +139,40 @@ export const searchPosts = async (query:string) => {
     );
 
     return videos.documents as Video[];
+  } catch (error) {
+    throw new Error(String(error));
+  }
+}
+
+
+
+export const getUserVideos = async (userId: string) => {
+  if (!userId) {
+    // Return an empty array if the userId is empty
+    return [];
+  }
+
+  try {
+    const videos = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videoCollectionId,
+      [
+        Query.equal('creator', userId),
+      ]
+    );
+
+    return videos.documents as Video[];
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession('current');
+
+    return session;
   } catch (error) {
     throw new Error(String(error));
   }

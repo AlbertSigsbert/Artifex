@@ -21,11 +21,14 @@ import { getAllVideos, getLatestVideos } from "@/lib/appwrite";
 import { Video } from "@/types";
 import { images } from "@/constants";
 import VideoCard from "@/components/VideoCard";
+import { useAppContext } from "@/context/GlobalProvider";
 
 
 const Home = () => {
   const { data: videos, refetch } = useAppwrite<Video[]>(getAllVideos);
   const { data: latestVideos } = useAppwrite<Video[]>(getLatestVideos);
+  
+  const { user } = useAppContext();
   
   const [refreshing, setRefreshing] = useState(false);
 
@@ -53,7 +56,7 @@ const Home = () => {
                   Welcome Back
                 </Text>
                 <Text className="font-psemibold text-2xl text-white">
-                  Alberto
+                  {user?.username}
                 </Text>
               </View>
               <View className="mt-1.5">
