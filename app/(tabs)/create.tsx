@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
 import { icons } from "@/constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-
-
+import * as DocumentPicker from "expo-document-picker";
 
 interface Media {
   uri: string;
@@ -19,7 +18,6 @@ interface FormState {
   prompt: string;
 }
 
-
 const Create = () => {
   const [form, setForm] = useState<FormState>({
     title: "",
@@ -29,6 +27,28 @@ const Create = () => {
   });
 
   const [uploading, setUploading] = useState(false);
+
+  const openPicker = async (selectType: "video" | "image") => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type:
+        selectType === "image"
+          ? ["image/png", "image/jpeg"]
+          : ["video/mp4", "video/gif"],
+    });
+
+    if (!result.canceled) {
+       if (selectType === 'image') {
+         setForm({...form, thumbnail: result.assets[0]})
+       }
+       if (selectType === 'video') {
+         setForm({...form, video: result.assets[0]})
+       }
+    }else{
+      setTimeout(() => {
+        Alert.alert('Document picked', JSON.stringify(result, null, 2))
+      }, 100)
+    }
+  };
 
   const submit = () => {};
 
@@ -49,7 +69,7 @@ const Create = () => {
           <Text className="text-base text-gray-100 font-pmedium">
             Upload Video
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("video")}>
             {form.video ? (
               <Video
                 source={{ uri: form.video.uri }}
@@ -77,7 +97,7 @@ const Create = () => {
             Thumbnail Image
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("image")}>
             {form.thumbnail ? (
               <Image
                 source={{ uri: form.thumbnail.uri }}
