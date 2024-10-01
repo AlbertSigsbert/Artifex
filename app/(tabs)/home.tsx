@@ -26,7 +26,7 @@ import { useAppContext } from "@/context/GlobalProvider";
 
 const Home = () => {
   const { data: videos, refetch } = useAppwrite<Video[]>(getAllVideos);
-  const { data: latestVideos } = useAppwrite<Video[]>(getLatestVideos);
+  const { data: latestVideos, refetch:refetchLatest } = useAppwrite<Video[]>(getLatestVideos);
   
   const { user } = useAppContext();
   
@@ -35,7 +35,10 @@ const Home = () => {
   const onRefresh = async () => {
     setRefreshing(true);
 
+    await refetchLatest()
+
     await refetch();
+
 
     setRefreshing(false);
   };

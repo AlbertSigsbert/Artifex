@@ -2,7 +2,6 @@ import { icons } from "@/constants";
 import { Video } from "@/types";
 import { useState } from "react";
 import {
-  Text,
   FlatList,
   TouchableOpacity,
   Image,
@@ -34,18 +33,15 @@ const zoomOut = {
 const TrendingItem = ({ activeVideo, video }: TrendingItemProps) => {
   const [play, setPlay] = useState(false);
 
-  // console.log('VIDEO URL',video.video)
-
   return (
     <Animatable.View
-      className="mr-5"
+      className="ml-5 mr-5"
       animation={activeVideo.$id === video.$id ? zoomIn : zoomOut}
       duration={500}
     >
       {play ? (
         <Vidz
-          // source={{ uri: video.video }}
-          source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+          source={{ uri: video.video }}
           className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
