@@ -77,25 +77,21 @@ const Create = () => {
       return Alert.alert("Please fill in all the fields");
     }
 
-
     setUploading(true);
 
-    
-    await createVideo({ ...form, userId:user?.$id })
-
-
     try {
+      await createVideo({ ...form, userId:user?.$id })
+
       Alert.alert("Success", "Video uploaded successfully");
+
       router.push("/home");
+
     } catch (error) {
+
       Alert.alert("Error", String(error));
-    } finally {
-      setForm({
-        title: "",
-        video: null,
-        thumbnail: null,
-        prompt: "",
-      });
+
+    } finally {  
+      setForm({title: "",video: null,thumbnail: null,prompt: ""});
 
       setUploading(false);
     }

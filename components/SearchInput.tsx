@@ -43,7 +43,7 @@ const SearchInput = ({ initialQuery }: { initialQuery?: string }) => {
         className="mt-0.5 flex-1 text-white font-pregular text-base"
         value={query}
         editable={true}
-        placeholder="Search for a video topic"
+        placeholder="Search for a video"
         placeholderTextColor="#CDCDE0"
         keyboardType="default"
         autoCorrect={false}

@@ -17,6 +17,7 @@ export const appwriteConfig = {
   databaseId: "66e2b3e6000e18e67a64",
   usersCollectionId: "66e2b407001e210b20e7",
   videoCollectionId: "66e2b5070022ac3dc96a",
+  bookmarkCollectionId:"66ffbc5a000b0765dfb7",
   storageId: "66e2c03d0034cb3c3072",
 };
 
@@ -65,7 +66,6 @@ export const createUser = async (
 
     return newUser as Creator;
   } catch (error) {
-    console.log(error);
     throw new Error(String(error));
   }
 };
@@ -95,7 +95,7 @@ export const getCurrentUser = async () => {
 
     return currentUser.documents[0] as Creator;
   } catch (error) {
-    console.log(error);
+    throw new Error(String(error));
   }
 };
 
@@ -143,7 +143,6 @@ export const searchPosts = async (query: string) => {
 
 export const getUserVideos = async (userId: string) => {
   if (!userId) {
-    // Return an empty array if the userId is empty
     return [];
   }
 
@@ -254,3 +253,179 @@ export const createVideo = async (form: FormState) => {
     throw new Error(String(error));
   }
 };
+
+
+export const bookmarkVideo = async (userId: string, videoId: string) => {
+  const currentTimestamp = new Date().toISOString();
+
+    const existingBookmarks = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      [
+        Query.equal("userId", userId),
+        Query.equal("videoId", videoId)
+      ]
+    );
+
+    if (existingBookmarks.documents.length > 0) {
+      throw new Error("Video already bookmarked.");
+    }
+
+
+  try {
+    const bookmark = await db.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      ID.unique(),
+      {
+        userId, 
+        videoId,
+        createdAt: currentTimestamp
+      }
+    );
+
+    return bookmark;
+  } catch (error) {
+    throw new Error(String(error));
+  }
+}
+
+export const checkIfBookmarked = async (userId: string, videoId: string) => {
+  try {
+    const existingBookmarks = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      [
+        Query.equal("userId", userId),
+        Query.equal("videoId", videoId)
+      ]
+    );
+
+    return existingBookmarks.documents.length > 0; // Return true if already bookmarked
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+export const unbookmarkVideo = async (userId: string, videoId: string) => {
+  try {
+    const existingBookmarks = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      [
+        Query.equal("userId", userId),
+        Query.equal("videoId", videoId)
+      ]
+    );
+
+    if (existingBookmarks.documents.length > 0) {
+      const bookmarkId = existingBookmarks.documents[0].$id;
+
+      await db.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.bookmarkCollectionId,
+        bookmarkId
+      );
+    }
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+
+
+
+
+const getVideoById = async (videoId:string) => {
+  try {
+    const videoDocument = await db.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.videoCollectionId,
+      videoId
+    );
+    return videoDocument as Video; 
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+export const getUserSavedVideos = async (userId: string) => {
+  if (!userId) {
+    return [];
+  }
+
+  try {
+    const bookmarks = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      [
+        Query.equal("userId", userId),
+        Query.orderDesc("$createdAt"),
+        Query.limit(10),
+      ]
+    );
+
+    const videoPromises = bookmarks.documents.map(async (bookmark) => {
+      const videoDetails = await getVideoById(bookmark.videoId);
+      return videoDetails;
+    });
+
+    const videos = await Promise.all(videoPromises);
+
+    return videos as Video[]; 
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+export const searchUserSavedVideos = async (userId: string, query: string) => {
+  if (!userId) {
+    return [];
+  }
+
+  try {
+  
+    const bookmarks = await db.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.bookmarkCollectionId,
+      [
+        Query.equal("userId", userId),
+        Query.orderDesc("$createdAt"), 
+      ]
+    );
+
+    const videoIds = bookmarks.documents.map((bookmark) => bookmark.videoId);
+
+    if (videoIds.length === 0) {
+      return []; 
+    }
+
+   
+    const videoPromises = videoIds.map(async (videoId) => {
+      const videoDetails = await db.getDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.videoCollectionId,
+        videoId
+      );
+      return videoDetails;
+    });
+
+    const videos = await Promise.all(videoPromises);
+
+    // Step 3: Filter videos by the search query (title)
+    const filteredVideos = videos.filter((video) =>
+      video.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return filteredVideos as Video[];
+  } catch (error) {
+    throw new Error(String(error));
+  }
+};
+
+
+

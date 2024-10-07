@@ -6,9 +6,10 @@ import { router } from "expo-router";
 interface EmptyStateProps {
   title: string;
   subtitle: string;
+  btnTitle:string;
 }
 
-const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
+const EmptyState = ({ title, subtitle, btnTitle }: EmptyStateProps) => {
   return (
     <View className="justify-center items-center px-4">
       <Image
@@ -21,7 +22,7 @@ const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
       </Text>
       <Text className="font-pmedium text-sm text-gray-100">{subtitle}</Text>
 
-      <CustomButton title="Create Video"  handlePress={()=> router.push("/create")} containerStyles="w-full my-5"/>
+      <CustomButton title={btnTitle} handlePress={()=> router.push("/create")} containerStyles="w-full my-5"/>
     </View>
   );
 };

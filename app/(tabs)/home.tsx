@@ -49,7 +49,7 @@ const Home = () => {
         data={videos}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
-         <VideoCard video={item} />
+          user ? <VideoCard video={item} user={user} /> : null
         )}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
@@ -85,6 +85,7 @@ const Home = () => {
           <EmptyState
             title="No Videos Found"
             subtitle="Be the first one to upload a video"
+            btnTitle="Create Video"
           />
         )}
         refreshControl={

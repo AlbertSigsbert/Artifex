@@ -34,7 +34,7 @@ const Profile = () => {
         <FlatList
           data={videos}
           keyExtractor={(item) => item.$id}
-          renderItem={({ item }) => <VideoCard video={item} />}
+          renderItem={({ item }) => user ? <VideoCard video={item} user={user} /> : null}
           ListHeaderComponent={() => (
             <View className="w-full justify-center items-center mt-6 mb-12 px-4">
                <TouchableOpacity className="w-full items-end mb-10" onPress={logout}>
@@ -59,6 +59,7 @@ const Profile = () => {
               <EmptyState
                 title="No Videos Found"
                 subtitle="No videos found for this search query"
+                  btnTitle="Create Video"
               />
             );
           }}
