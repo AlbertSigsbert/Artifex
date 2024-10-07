@@ -3,4 +3,5 @@
 - User Authentincation
 - Serach Functionality
 - Video Upload
+- Bookmark feature
 - Appwrite Backend
