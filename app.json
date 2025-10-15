@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-       "package":"com.albertcodes.aura"
+      "package": "com.albertcodes.aura"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +32,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d3b62a86-1c81-431e-9e66-f77e84a5810e"
+      }
+    },
+    "owner": "albertsigsbert"
   }
 }
